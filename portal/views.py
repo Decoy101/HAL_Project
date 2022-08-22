@@ -1,15 +1,20 @@
-from django.http import HttpResponse, HttpResponseRedirect
+# from channels.auth import login, logout
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login, logout, authenticate
+
 from portal.EmailBackEnd import EmailBackEnd
-# Create your views here.
+
 
 def home(request):
-    return render(request,'index.html')
+    return render(request, 'index.html')
 
-def login(request):
-    return render(request,'login.html')
+
+def loginPage(request):
+    return render(request, 'login.html')
+
+
 
 def doLogin(request):
     if request.method != "POST":
@@ -38,6 +43,18 @@ def doLogin(request):
             #return HttpResponseRedirect("/")
             return redirect('login')
 
+
+
+def get_user_details(request):
+    if request.user != None:
+        return HttpResponse("User: "+request.user.email+" User Type: "+request.user.user_type)
+    else:
+        return HttpResponse("Please Login First")
+
+
+
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
