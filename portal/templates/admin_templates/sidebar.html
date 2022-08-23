@@ -1,0 +1,62 @@
+{% load static %}
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+     
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+      
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordian="false">
+            <li class="nav-item">
+                {% url 'admin_home' as admin_home %}
+                <a href="{{ admin_home }}" class="nav-link {% if request.path == admin_home %} active {% endif %}">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Home
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                {% url 'add_session' as add_session %}
+                <a href="{{ add_session }}" class="nav-link {% if request.path == add_session %} active {% endif %}">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Add Session
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                {% url 'manage_session' as manage_session %}
+                <a href="{{ manage_session }}" class="nav-link {% if request.path == manage_session %} active {% endif %}">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>Manage Session</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                {% url 'add_student' as add_student %}
+                <a href="{{ add_student }}" class="nav-link {% if request.path == add_student %} active {% endif %}">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>Add Student</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                {% url 'manage_students' as manage_students %}
+                <a href="{{ manage_students }}" class="nav-link {% if request.path == manage_students %} active {% endif %}">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>Manage Students</p>
+                </a>
+              </li>
+
+          </ul>
+    
+
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
