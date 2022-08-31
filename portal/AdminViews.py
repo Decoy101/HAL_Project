@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import SessionYearModel, CustomUser, Student
 from django.core.files.storage import FileSystemStorage
-from .forms import AddStudentForm
+from .forms import AddStudentForm, EditStudentForm
 
 
 
@@ -96,6 +96,7 @@ def add_student_save(request):
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
+            username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             address = form.cleaned_data['address']
@@ -111,14 +112,14 @@ def add_student_save(request):
                 profile_pic_url = None
 
             try:
-                user = CustomUser.objects.create_user(password=password,email=email, first_name = first_name, last_name=last_name, user_type=3)
-                user.students.address = address
+                user = CustomUser.objects.create_user(username=username, password=password ,email=email, first_name = first_name, last_name=last_name, user_type=3)
+                user.student.address = address
 
                 session_year_obj = SessionYearModel.objects.get(id=session_year_id)
-                user.students.session_year_id = session_year_obj
+                user.student.session_year_id = session_year_obj
 
                 user.student.gender = gender
-                user.students.profile_pic = profile_pic_url
+                user.student.profile_pic = profile_pic_url
                 user.save()
                 messages.success(request, "Student Added Successfully!")
                 return redirect('add_student')
@@ -138,3 +139,86 @@ def manage_students(request):
     return render(request, 'admin_templates/manage_students.html',context)
 
 
+def delete_student(request,student_id):
+    student = Student.objects.get(admin=student_id)
+    try:
+        student.delete()
+        messages.success(request,"Student Deleted Successfully")
+        return redirect('manage_students')
+    except:
+        messages.error(request,'Failed to delete the student')
+        return redirect('manage_students')
+
+
+
+def edit_student(request,student_id):
+    request.session['student_id'] = student_id
+    student = Student.objects.get(admin=student_id)
+    form = EditStudentForm()
+    form.fields['email'].initial = student.admin.email
+    form.fields['first_name'].initial = student.admin.first_name
+    form.fields['last_name'].initial = student.admin.last_name
+    form.fields['address'].initial = student.address
+    form.fields['gender'].initial = student.gender
+    form.fields['session_year_id'].initial = student.session_year_id.id
+
+    context = {
+        "id": student_id,
+        "form": form
+    }
+    return render(request,'admin_templates/edit_student.html',context)
+
+def edit_student_save(request):
+    if request.method != "POST":
+        messages.error("Invalid Request")
+        return redirect('manage_students')
+    else:
+        student_id = request.session.get('student_id')
+        if student_id == None:
+            return redirect('/manage_student')
+        form = EditStudentForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            address = form.cleaned_data['address']
+            session_year_id = form.cleaned_data['session_year_id']
+            gender = form.cleaned_data['gender']
+
+            if len(request.FILES) != 0:
+                profile_pic = request.FILES['profile_pic']
+                fs = FileSystemStorage()
+                filename = fs.save(profile_pic.name,profile_pic)
+                profile_pic_url = fs.url(filename)
+            else:
+                profile_pic_url = None
+
+            try:
+                user = CustomUser.objects.get(id=student_id)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.email = email
+                user.save()
+
+                student_model = Student.objects.get(admin=student_id)
+                student_model.address = address
+                session_year_obj = SessionYearModel.objects.get(id=session_year_id)
+                student_model.session_year_id = session_year_obj
+                student_model.gender = gender
+                if profile_pic_url != None:
+                    student_model.profile_pic = profile_pic_url
+                student_model.save()
+
+                del request.session['student_id']
+
+                messages.success(request,"Student Updated Successfully")
+                return redirect('/edit_student/'+student_id)
+
+
+
+            except:
+                messages.error(request, "Failed to Update Student!")
+                return redirect('/edit_student/'+student_id)
+        else:
+            return redirect('/edit_student/'+student_id)

@@ -15,6 +15,9 @@ urlpatterns = [
    path('add_student',AdminViews.add_student,name="add_student"),
    path('add_student_save',AdminViews.add_student_save,name='add_student_save'),
    path('manage_students',AdminViews.manage_students,name="manage_students"),
+   path('edit_student/<student_id>',AdminViews.edit_student,name="edit_student"),
+   path('edit_student_save',AdminViews.edit_student_save,name="edit_student_save"),
+   path('delete_student/<student_id>/',AdminViews.delete_student,name="delete_student")
 
 
 ]
