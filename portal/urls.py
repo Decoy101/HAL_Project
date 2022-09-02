@@ -1,5 +1,5 @@
 from django.urls import path, include
-from portal import StaffViews
+from portal import StaffViews, StudentViews
 
 from portal.models import Admin
 from . import views
@@ -28,7 +28,10 @@ urlpatterns = [
 
 # URLS for Staff
     path('staff_home',StaffViews.staff_home,name="staff_home"),
+    
 
 
+# URls for Students
+    path('student_home',StudentViews.student_home,name="student_home"),
 
 ]
