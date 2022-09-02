@@ -36,12 +36,22 @@ class Student(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
+class Staffs(models.Model):
+    id = models.AutoField(primary_key=True)
+    admin = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+
 @receiver(post_save,sender = CustomUser)
 
 def create_user_field(sender,instance,created,**kwargs):
     if created:
         if instance.user_type == 1:
             Admin.objects.create(admin=instance)
+        if instance.user_type == 2:
+            Staffs.objects.create(admin=instance)
         if instance.user_type == 3:
             Student.objects.create(admin=instance,session_year_id=SessionYearModel.objects.get(id=1),address="",profile_pic="",gender="")
 
@@ -50,5 +60,7 @@ def create_user_field(sender,instance,created,**kwargs):
 def save_user_profile(sender, instance, **kwargs):
     if instance.user_type == 1:
         instance.admin.save()
+    if instance.user_type == 2:
+        instance.staffs.save()
     if instance.user_type == 3:
         instance.student.save()

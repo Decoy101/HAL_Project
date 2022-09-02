@@ -1,7 +1,8 @@
+import email
 from django.shortcuts import render, redirect
 
 from django.contrib import messages
-from .models import SessionYearModel, CustomUser, Student
+from .models import SessionYearModel, CustomUser, Student, Staffs
 from django.core.files.storage import FileSystemStorage
 from .forms import AddStudentForm, EditStudentForm
 
@@ -222,3 +223,49 @@ def edit_student_save(request):
                 return redirect('/edit_student/'+student_id)
         else:
             return redirect('/edit_student/'+student_id)
+
+
+def add_staff(request):
+    return render(request, 'admin_templates/add_staff.html')
+
+def add_staff_save(request):
+    if request.method != 'POST':
+        messages.error(request,'Invalid Method')
+        return redirect('add_staff')
+    else:
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            user = CustomUser.objects.create_user(username=username,password=password,email=email,first_name=first_name,last_name=last_name,user_type=2)
+            user.save()
+            messages.success(request,"Staff added successfully")
+            return redirect('add_staff')
+        except:
+            messages.error(request,"Failed to add staff")
+            return redirect('add_staff')
+    
+def manage_staff(request):
+    staffs = Staffs.objects.all()
+
+    context = {
+        "staffs" : staffs,
+
+    }
+    return render(request,'admin_templates/manage_staff.html',context)
+
+def delete_staff(request,staff_id):
+    staff = Staffs.objects.get(admin=staff_id)
+    try:
+        staff.delete()
+        messages.success(request,"Staff Deleted Successfully")
+        return redirect('manage_staff')
+    except:
+        messages.error(request,'Failed to delete staff')
+        return redirect('manage_staff')
+
+
+
