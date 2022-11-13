@@ -2,7 +2,7 @@ import email
 from django.shortcuts import render, redirect
 
 from django.contrib import messages
-from .models import SessionYearModel, CustomUser, Student, Staffs, Courses
+from .models import SessionYearModel, CustomUser, Student, Staffs, Courses, Subjects
 from django.core.files.storage import FileSystemStorage
 from .forms import AddStudentForm, EditStudentForm
 
@@ -310,4 +310,47 @@ def delete_course(request,course_id):
     messages.error(request,"Course Deleted Successfully")
     return redirect('manage_courses')
     
+def add_subject(request):
+    courses = Courses.objects.all()
+    staffs = CustomUser.objects.filter(user_type='2')
+    context = {
+        "courses": courses,
+        "staffs": staffs
+    }
+    return render(request, 'admin_templates/add_subject.html', context)
+
+
+def add_subject_save(request):
+    if request.method != "POST":
+        messages.error(request, "Method Not Allowed!")
+        return redirect('add_subject')
+    else:
+        subject_name = request.POST.get('subject')
+
+        course_id = request.POST.get('course')
+        course = Courses.objects.get(id=course_id)
+        
+        staff_id = request.POST.get('staff')
+        staff = CustomUser.objects.get(id=staff_id)
+
+        try:
+            subject = Subjects(subject_name=subject_name, course_id=course, staff_id=staff)
+            subject.save()
+            messages.success(request, "Subject Added Successfully!")
+            return redirect('add_subject')
+        except:
+            messages.error(request, "Failed to Add Subject!")
+            return redirect('add_subject')
     
+def manage_subjects(request):
+    subjects = Subjects.objects.all()
+    context = {
+        "subjects": subjects
+    }
+    return render(request, 'admin_templates/manage_subjects.html', context)
+
+def delete_subject(request,subject_id):
+    subject = Subjects.objects.all()
+    subject.delete()
+    messages.error(request,'Subject Deleted Successfully')
+    return redirect('manage_subjects')

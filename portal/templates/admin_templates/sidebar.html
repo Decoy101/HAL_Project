@@ -72,6 +72,20 @@
                   <p>Manage Courses</p>
                 </a>
               </li>
+              <li class="nav-item">
+                {% url 'add_subject' as add_subject %}
+                <a href="{{ add_subject }}" class="nav-link {% if request.path == add_subject %} active {% endif %}">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>Add Subject</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                {% url 'manage_subjects' as manage_subjects %}
+                <a href="{{ manage_subjects }}" class="nav-link {% if request.path == manage_subjects %} active {% endif %}">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>Manage Subjects</p>
+                </a>
+              </li>
 
           </ul>
     

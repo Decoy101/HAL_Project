@@ -30,6 +30,10 @@ urlpatterns = [
     path('add_course_save/',AdminViews.add_course_save,name="add_course_save"),
     path('manage_courses',AdminViews.manage_courses,name="manage_courses"),
     path('delete_course/<course_id>',AdminViews.delete_course,name="delete_course"),
+    path('add_subject',AdminViews.add_subject,name="add_subject"),
+    path('add_subject_save',AdminViews.add_subject_save,name="add_subject_save"),
+    path('manage_subjects',AdminViews.manage_subjects,name='manage_subjects'),
+    path('delete_subject/<subject_id>',AdminViews.delete_subject,name="delete_subject"),
 
 
 # URLS for Staff
