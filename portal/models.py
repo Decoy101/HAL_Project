@@ -44,6 +44,14 @@ class Staffs(models.Model):
     objects = models.Manager()
 
 
+class Courses(models.Model):
+    id = models.AutoField(primary_key=True)
+    course_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
+
 @receiver(post_save,sender = CustomUser)
 
 def create_user_field(sender,instance,created,**kwargs):
@@ -64,3 +72,5 @@ def save_user_profile(sender, instance, **kwargs):
         instance.staffs.save()
     if instance.user_type == 3:
         instance.student.save()
+
+

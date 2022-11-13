@@ -25,6 +25,12 @@ urlpatterns = [
     path('add_staff_save',AdminViews.add_staff_save,name="add_staff_save"),
     path('manage_staff',AdminViews.manage_staff,name="manage_staff"),
     path('delete_staff/<staff_id>',AdminViews.delete_staff,name="delete_staff"),
+    path('edit_staff/<staff_id>/', AdminViews.edit_staff, name="edit_staff"),
+    path('add_course',AdminViews.add_course,name="add_course"),
+    path('add_course_save/',AdminViews.add_course_save,name="add_course_save"),
+    path('manage_courses',AdminViews.manage_courses,name="manage_courses"),
+    path('delete_course/<course_id>',AdminViews.delete_course,name="delete_course"),
+
 
 # URLS for Staff
     path('staff_home',StaffViews.staff_home,name="staff_home"),

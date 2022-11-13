@@ -2,7 +2,7 @@ import email
 from django.shortcuts import render, redirect
 
 from django.contrib import messages
-from .models import SessionYearModel, CustomUser, Student, Staffs
+from .models import SessionYearModel, CustomUser, Student, Staffs, Courses
 from django.core.files.storage import FileSystemStorage
 from .forms import AddStudentForm, EditStudentForm
 
@@ -257,6 +257,16 @@ def manage_staff(request):
     }
     return render(request,'admin_templates/manage_staff.html',context)
 
+def edit_staff(request,staff_id):
+    staff = Staffs.objects.get(admin=staff_id)
+
+    context = {
+        "staff":staff,
+        "id": staff_id
+    }
+    return render(request,'admin_templates/edit_staff.html',context)
+
+
 def delete_staff(request,staff_id):
     staff = Staffs.objects.get(admin=staff_id)
     try:
@@ -268,4 +278,36 @@ def delete_staff(request,staff_id):
         return redirect('manage_staff')
 
 
+def add_course(request):
+    return render(request, "admin_templates/add_course.html")
 
+
+def add_course_save(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid Method!")
+        return redirect('add_course')
+    else:
+        course = request.POST.get('course')
+        try:
+            course_model = Courses(course_name=course)
+            course_model.save()
+            messages.success(request, "Course Added Successfully!")
+            return redirect('add_course')
+        except:
+            messages.error(request, "Failed to Add Course!")
+            return redirect('add_course')
+
+def manage_courses(request):
+    courses = Courses.objects.all()
+    context = {
+        "courses": courses
+    }
+    return render(request, 'admin_templates/manage_courses.html', context)
+
+def delete_course(request,course_id):
+    course = Courses.objects.get(id=course_id)
+    course.delete()
+    messages.error(request,"Course Deleted Successfully")
+    return redirect('manage_courses')
+    
+    
