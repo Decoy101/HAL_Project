@@ -16,10 +16,20 @@
             
             <li class="nav-item">
               {% url 'student_home' as student_home %}
-              <a href="{{ student_home }}" class="nav-link {% if request.path == staff_home %} active {% endif %}">
+              <a href="{{ student_home }}" class="nav-link {% if request.path == student_home %} active {% endif %}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Home
+                  {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              {% url 'student_view_result' as student_view_result %}
+              <a href="{{ student_view_result }}" class="nav-link {% if request.path == student_view_result %} active {% endif %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  View Results
                   {% comment %} <span class="right badge badge-danger">New</span> {% endcomment %}
                 </p>
               </a>

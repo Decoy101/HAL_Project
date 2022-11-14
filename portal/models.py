@@ -18,6 +18,13 @@ class SessionYearModel(models.Model):
     session_end_year = models.DateField()
     objects = models.Manager()
 
+class Courses(models.Model):
+    id = models.AutoField(primary_key=True)
+    course_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
 class Admin(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -32,6 +39,7 @@ class Student(models.Model):
     profile_pic = models.FileField()
     address = models.TextField()
     session_year_id = models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
@@ -44,12 +52,7 @@ class Staffs(models.Model):
     objects = models.Manager()
 
 
-class Courses(models.Model):
-    id = models.AutoField(primary_key=True)
-    course_name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
+
 
 class Subjects(models.Model):
     id =models.AutoField(primary_key=True)
@@ -59,6 +62,17 @@ class Subjects(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+
+class StudentResult(models.Model):
+    id = models.AutoField(primary_key=True)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    subject_id = models.ForeignKey(Subjects, on_delete=models.CASCADE)
+    subject_exam_marks = models.FloatField(default=0)
+    subject_assignment_marks = models.FloatField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+
 
 @receiver(post_save,sender = CustomUser)
 

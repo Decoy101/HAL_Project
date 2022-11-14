@@ -38,10 +38,13 @@ urlpatterns = [
 
 # URLS for Staff
     path('staff_home',StaffViews.staff_home,name="staff_home"),
-    
+    path('staff_add_result',StaffViews.staff_add_result,name="staff_add_result"),
+    path('staff_add_result_save',StaffViews.staff_add_result_save,name="staff_add_result_save"),
+    path('get_students/', StaffViews.get_students, name="get_students"),
 
 
 # URls for Students
     path('student_home',StudentViews.student_home,name="student_home"),
+    path('student_view_result',StudentViews.student_view_result,name="student_view_result"),
 
 ]

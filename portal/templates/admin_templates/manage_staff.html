@@ -74,7 +74,7 @@
                             <tbody>
                                 {% for staff in staffs %}
                                 <tr>
-                                <td>{{ staff.admin.id }}</td>
+                                <td>{{ forloop.counter }}</td>
                                 <td>{{ staff.admin.first_name }}</td>
                                 <td>{{ staff.admin.last_name }}</td>
                                 <td>{{ staff.admin.username }}</td>
