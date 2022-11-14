@@ -78,8 +78,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd4qkgih72icp7',
+        'USER': 'ochbfbhdapllmh',
+        'PASSWORD': 'e7fa9f76fe2fc64cc710ceb3c388eefed279859d9ae6d4c1531e8b50fdf28804',
+        'URL': 'postgres://ochbfbhdapllmh:e7fa9f76fe2fc64cc710ceb3c388eefed279859d9ae6d4c1531e8b50fdf28804@ec2-18-215-41-121.compute-1.amazonaws.com:5432/d4qkgih72icp7',
+        'HOST': 'ec2-18-215-41-121.compute-1.amazonaws.com',
+        "PORT": '5432'
     }
 }
 
@@ -118,15 +123,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
+SSTATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 
 AUTH_USER_MODEL = 'portal.CustomUser'
+AUTHENTICATION_BACKENDS = ['portal.EmailBackEnd.EmailBackEnd']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
